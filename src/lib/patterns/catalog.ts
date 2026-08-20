@@ -1,0 +1,301 @@
+import { closedPath, figureEightHorizontal, figureEightVertical, loopAround, outerBorder, pattern, petals } from "./builders";
+import type { KolamPattern } from "@/lib/game/types";
+
+export const KOLAM_PATTERNS: KolamPattern[] = [
+  pattern({
+    id: "bindu",
+    name: "Bindu",
+    gridSize: 3,
+    category: "beginner",
+    difficulty: 1,
+    tags: ["center", "loop", "first"],
+    paths: [closedPath("p1", loopAround({ x: 1, y: 1 }))],
+  }),
+  pattern({
+    id: "ilai",
+    name: "Ilai",
+    gridSize: 3,
+    category: "beginner",
+    difficulty: 1,
+    tags: ["single", "loop"],
+    paths: [closedPath("p1", loopAround({ x: 1, y: 0 }))],
+  }),
+  pattern({
+    id: "irani",
+    name: "Irani",
+    gridSize: 3,
+    category: "beginner",
+    difficulty: 2,
+    tags: ["figure-8", "memory"],
+    paths: [closedPath("p1", figureEightHorizontal({ x: 0, y: 1 }))],
+  }),
+  pattern({
+    id: "kuttu",
+    name: "Kuttu",
+    gridSize: 3,
+    category: "beginner",
+    difficulty: 2,
+    tags: ["border", "2x2"],
+    paths: [closedPath("p1", outerBorder(0, 0, 1, 1))],
+  }),
+  pattern({
+    id: "malar-mini",
+    name: "Malar Mini",
+    gridSize: 3,
+    category: "beginner",
+    difficulty: 2,
+    tags: ["petals", "multi-path"],
+    paths: petals({ x: 1, y: 1 }, 1).map((points, i) => closedPath(`p${i + 1}`, points)),
+  }),
+  pattern({
+    id: "prakara",
+    name: "Prakara",
+    gridSize: 3,
+    category: "beginner",
+    difficulty: 2,
+    tags: ["border", "frame"],
+    paths: [closedPath("p1", outerBorder(0, 0, 2, 2))],
+  }),
+  pattern({
+    id: "bindu-5",
+    name: "Bindu Five",
+    gridSize: 5,
+    category: "easy",
+    difficulty: 2,
+    tags: ["center", "loop"],
+    paths: [closedPath("p1", loopAround({ x: 2, y: 2 }))],
+  }),
+  pattern({
+    id: "irani-5",
+    name: "Neli",
+    gridSize: 5,
+    category: "easy",
+    difficulty: 2,
+    tags: ["figure-8"],
+    paths: [closedPath("p1", figureEightHorizontal({ x: 1, y: 2 }))],
+  }),
+  pattern({
+    id: "kuttu-5",
+    name: "Kuttu Square",
+    gridSize: 5,
+    category: "easy",
+    difficulty: 2,
+    tags: ["border"],
+    paths: [closedPath("p1", outerBorder(1, 1, 2, 2))],
+  }),
+  pattern({
+    id: "neli-vert",
+    name: "Neli Vertical",
+    gridSize: 5,
+    category: "easy",
+    difficulty: 2,
+    tags: ["figure-8"],
+    paths: [closedPath("p1", figureEightVertical({ x: 2, y: 1 }))],
+  }),
+  pattern({
+    id: "inner-prakara",
+    name: "Inner Prakara",
+    gridSize: 5,
+    category: "easy",
+    difficulty: 3,
+    tags: ["border", "3x3"],
+    paths: [closedPath("p1", outerBorder(1, 1, 3, 3))],
+  }),
+  pattern({
+    id: "malar",
+    name: "Malar",
+    gridSize: 5,
+    category: "easy",
+    difficulty: 3,
+    tags: ["flower", "petals"],
+    paths: [
+      closedPath("center", loopAround({ x: 2, y: 2 })),
+      ...petals({ x: 2, y: 2 }, 1).map((points, i) => closedPath(`petal-${i + 1}`, points)),
+    ],
+  }),
+  pattern({
+    id: "maala",
+    name: "Maala",
+    gridSize: 5,
+    category: "easy",
+    difficulty: 3,
+    tags: ["chain", "loops"],
+    paths: [
+      closedPath("a", figureEightHorizontal({ x: 0, y: 2 })),
+      closedPath("b", figureEightHorizontal({ x: 2, y: 2 })),
+    ],
+  }),
+  pattern({
+    id: "nested",
+    name: "Nested Loops",
+    gridSize: 5,
+    category: "intermediate",
+    difficulty: 3,
+    tags: ["nested", "memory"],
+    paths: [
+      closedPath("outer", outerBorder(1, 1, 3, 3)),
+      closedPath("inner", loopAround({ x: 2, y: 2 })),
+    ],
+  }),
+  pattern({
+    id: "deepam",
+    name: "Deepam",
+    gridSize: 5,
+    category: "intermediate",
+    difficulty: 3,
+    tags: ["cross", "figure-8"],
+    paths: [
+      closedPath("h", figureEightHorizontal({ x: 1, y: 2 })),
+      closedPath("v", figureEightVertical({ x: 2, y: 1 })),
+    ],
+  }),
+  pattern({
+    id: "poo",
+    name: "Poo",
+    gridSize: 7,
+    category: "intermediate",
+    difficulty: 3,
+    tags: ["flower"],
+    paths: [
+      closedPath("center", loopAround({ x: 3, y: 3 })),
+      ...petals({ x: 3, y: 3 }, 1).map((points, i) => closedPath(`petal-${i + 1}`, points)),
+    ],
+  }),
+  pattern({
+    id: "sikku-naalu",
+    name: "Sikku Naalu",
+    gridSize: 7,
+    category: "intermediate",
+    difficulty: 4,
+    tags: ["sikku", "border"],
+    paths: [
+      closedPath("box", outerBorder(2, 2, 4, 4)),
+      closedPath("eight", figureEightHorizontal({ x: 2, y: 3 })),
+    ],
+  }),
+  pattern({
+    id: "twin-maalai",
+    name: "Twin Maalai",
+    gridSize: 7,
+    category: "intermediate",
+    difficulty: 4,
+    tags: ["chain"],
+    paths: [
+      closedPath("top", figureEightHorizontal({ x: 1, y: 2 })),
+      closedPath("bottom", figureEightHorizontal({ x: 3, y: 4 })),
+    ],
+  }),
+  pattern({
+    id: "ashtamalar",
+    name: "Ashta Malar",
+    gridSize: 7,
+    category: "intermediate",
+    difficulty: 4,
+    tags: ["petals", "symmetry"],
+    paths: [
+      closedPath("c", loopAround({ x: 3, y: 3 })),
+      closedPath("n", loopAround({ x: 3, y: 2 })),
+      closedPath("ne", loopAround({ x: 4, y: 2 })),
+      closedPath("e", loopAround({ x: 4, y: 3 })),
+      closedPath("se", loopAround({ x: 4, y: 4 })),
+      closedPath("s", loopAround({ x: 3, y: 4 })),
+      closedPath("sw", loopAround({ x: 2, y: 4 })),
+      closedPath("w", loopAround({ x: 2, y: 3 })),
+      closedPath("nw", loopAround({ x: 2, y: 2 })),
+    ],
+  }),
+  pattern({
+    id: "perum-prakara",
+    name: "Perum Prakara",
+    gridSize: 7,
+    category: "advanced",
+    difficulty: 4,
+    tags: ["border", "large"],
+    paths: [closedPath("p1", outerBorder(0, 0, 6, 6))],
+  }),
+  pattern({
+    id: "triple-nested",
+    name: "Triple Nested",
+    gridSize: 7,
+    category: "advanced",
+    difficulty: 4,
+    tags: ["nested", "memory"],
+    paths: [
+      closedPath("outer", outerBorder(0, 0, 6, 6)),
+      closedPath("mid", outerBorder(2, 2, 4, 4)),
+      closedPath("inner", loopAround({ x: 3, y: 3 })),
+    ],
+  }),
+  pattern({
+    id: "nava",
+    name: "Nava Bindu",
+    gridSize: 7,
+    category: "advanced",
+    difficulty: 4,
+    tags: ["grid", "loops"],
+    paths: [1, 3, 5].flatMap((y) =>
+      [1, 3, 5].map((x) => closedPath(`d-${x}-${y}`, loopAround({ x, y }))),
+    ),
+  }),
+  pattern({
+    id: "sikku-chain",
+    name: "Sikku Chain",
+    gridSize: 7,
+    category: "advanced",
+    difficulty: 5,
+    tags: ["chain", "turns"],
+    paths: [
+      closedPath("a", figureEightHorizontal({ x: 0, y: 3 })),
+      closedPath("b", figureEightHorizontal({ x: 2, y: 3 })),
+      closedPath("c", figureEightHorizontal({ x: 4, y: 3 })),
+    ],
+  }),
+  pattern({
+    id: "mahal",
+    name: "Mahal",
+    gridSize: 9,
+    category: "advanced",
+    difficulty: 5,
+    tags: ["nested", "flower", "large"],
+    paths: [
+      closedPath("outer", outerBorder(0, 0, 8, 8)),
+      closedPath("mid", outerBorder(2, 2, 6, 6)),
+      closedPath("center", loopAround({ x: 4, y: 4 })),
+      ...petals({ x: 4, y: 4 }, 1).map((points, i) => closedPath(`petal-${i + 1}`, points)),
+    ],
+  }),
+  pattern({
+    id: "brahma",
+    name: "Brahma Mudi",
+    gridSize: 9,
+    category: "advanced",
+    difficulty: 5,
+    tags: ["complex", "symmetry"],
+    paths: [
+      closedPath("outer", outerBorder(1, 1, 7, 7)),
+      closedPath("h", figureEightHorizontal({ x: 3, y: 4 })),
+      closedPath("v", figureEightVertical({ x: 4, y: 3 })),
+      closedPath("c", loopAround({ x: 4, y: 4 })),
+      closedPath("nw", loopAround({ x: 2, y: 2 })),
+      closedPath("ne", loopAround({ x: 6, y: 2 })),
+      closedPath("se", loopAround({ x: 6, y: 6 })),
+      closedPath("sw", loopAround({ x: 2, y: 6 })),
+    ],
+  }),
+];
+
+export function listPatterns(): KolamPattern[] {
+  return KOLAM_PATTERNS;
+}
+
+export function getPatternById(id: string): KolamPattern | undefined {
+  return KOLAM_PATTERNS.find((patternItem) => patternItem.id === id);
+}
+
+export function patternsByCategory(category: KolamPattern["category"]): KolamPattern[] {
+  return KOLAM_PATTERNS.filter((patternItem) => patternItem.category === category);
+}
+
+export function getTimedPool(): KolamPattern[] {
+  return KOLAM_PATTERNS.filter((patternItem) => patternItem.difficulty <= 4).slice(0, 16);
+}
