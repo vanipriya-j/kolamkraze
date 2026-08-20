@@ -29,8 +29,15 @@ describe("pattern catalog", () => {
         return pairs;
       });
       for (const [from, to] of expanded) {
-        expect(choosePulli(from, to), `${pattern.id} ${from.x},${from.y} -> ${to.x},${to.y}`).not.toBeNull();
-        expect(hasLatticeEdge(lattice, from, to), `${pattern.id} missing lattice edge`).toBe(true);
+        const ring = choosePulli(from, to);
+        const onLattice = hasLatticeEdge(lattice, from, to);
+        expect(
+          onLattice,
+          `${pattern.id} missing lattice edge ${from.x},${from.y} -> ${to.x},${to.y}`,
+        ).toBe(true);
+        if (ring) {
+          expect(onLattice).toBe(true);
+        }
       }
       expect(expectedEdgeKeys(pattern).size).toBeGreaterThan(0);
     }

@@ -72,12 +72,15 @@ Persistence and analytics sit behind interfaces so a later Supabase/Firebase/GA4
 2. Add a `pattern({ ... })` entry using the builders in `src/lib/patterns/builders.ts`.
 3. Keep coordinates on the pulli lattice: integer dots, with path points at the cardinal midpoints around those dots (`N/E/S/W` at distance 0.5).
 4. Prefer the helpers:
-   - `loopAround({ x, y })` — one loop around a pulli
-   - `figureEightHorizontal(left)` / `figureEightVertical(top)`
-   - `outerBorder(x0, y0, x1, y1)` — scalloped sikku border
-   - `petals(center)` — four surrounding loops
+   - `loopAround({ x, y })` — one loop around a single pulli
+   - `capsuleH(x0, y, x1)` / `capsuleV(x, y0, y1)` — elongated kambi around a row or column of pullis
+   - `enclosure(x0, y0, x1, y1)` — rounded enclosure around a block (1×1 is a loop; 1×n is a capsule)
+   - `moolaiSiluvai(size)` — four corner loops plus a plus of two capsules (classic 3×3)
+   - `figureEightHorizontal(left)` / `figureEightVertical(top)` — sikku weave
 5. Set `gridSize`, `category`, and `difficulty`. Difficulty should reflect crossings, path count, memory load and turns, not only grid size.
 6. Run `npm test` — the catalog test checks that every expected edge sits on the drawing lattice.
+
+Kolams in this game are not a field of circles. Most patterns **enclose** one or more pullis: a small loop around one dot, a capsule around a row, a rounded frame around a block. Paths may overlap (the 3×3 plus shares the center pulli).
 
 Do not edit `GamePlay.tsx` or validation code to add a level.
 

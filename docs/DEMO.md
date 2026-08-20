@@ -116,10 +116,12 @@ What to show:
 
 How to draw Bindu:
 
-1. Put a finger near the faint loop around the center dot.
-2. Drag slowly along the circle. Let it click from point to point.
+1. Put a finger near the faint loop around the **center** pulli.
+2. Drag slowly around that one dot. Let it click from point to point.
 3. Go all the way around once.
 4. Tap **Check**.
+
+Then, if the room still has patience, open **Kambi** (the long loop around the middle row) or **Moolai Siluvai** (four corner loops + a plus of two capsules). That 3×3 is the real kolam language: not a field of circles, but loops that **enclose** one or more dots, and can overlap on the center.
 
 You want **Beautifully done.** and stars. One star is enough. Three stars is a bonus, not the point.
 
