@@ -28,6 +28,8 @@ npm run build
 
 The app is optimized for mobile browsers. On desktop it stays a narrow, editorial column.
 
+For a live walkthrough (phone, venue QR, talking points), see [docs/DEMO.md](docs/DEMO.md).
+
 Venue QR demo:
 
 ```txt
