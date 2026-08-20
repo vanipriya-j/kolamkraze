@@ -1,0 +1,72 @@
+@import "tailwindcss";
+
+:root {
+  --ivory: #f4efe6;
+  --ivory-deep: #ebe4d6;
+  --charcoal: #1f1b16;
+  --ink: #2c2722;
+  --earth: #8c6a4f;
+  --muted: #6e675c;
+  --background: var(--ivory);
+  --foreground: var(--charcoal);
+}
+
+@theme inline {
+  --color-ivory: var(--ivory);
+  --color-ivory-deep: var(--ivory-deep);
+  --color-charcoal: var(--charcoal);
+  --color-ink: var(--ink);
+  --color-earth: var(--earth);
+  --color-muted: var(--muted);
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --font-sans: var(--font-sans);
+  --font-display: var(--font-display);
+}
+
+html,
+body {
+  background: var(--ivory);
+  color: var(--charcoal);
+  min-height: 100%;
+}
+
+body {
+  font-family: var(--font-sans), "Figtree", ui-sans-serif, system-ui, sans-serif;
+  text-rendering: optimizeLegibility;
+}
+
+.font-display {
+  font-family: var(--font-display), "Cormorant Garamond", Georgia, serif;
+  font-weight: 500;
+}
+
+.grain {
+  position: relative;
+}
+
+.grain::before {
+  content: "";
+  pointer-events: none;
+  position: fixed;
+  inset: 0;
+  z-index: 40;
+  opacity: 0.045;
+  mix-blend-mode: multiply;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='180' height='180'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='180' height='180' filter='url(%23n)' opacity='0.55'/%3E%3C/svg%3E");
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}
+
+::selection {
+  background: color-mix(in srgb, var(--earth) 28%, white);
+}
