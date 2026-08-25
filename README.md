@@ -1,10 +1,10 @@
 # Kolam Kraze
 
-Aarla Play’s first experience: a short-session, mobile-first kolam game.
+Aarla Play’s first experience: a short-session kolam game.
 
 **See it. Remember it. Draw it.**
 
-Kolam Kraze is a responsive web app / PWA. It is meant to work as a casual game, a QR wait-time game at physical venues, and a bridge from digital play to drawing kolams in the real world.
+The **current product** is the Flutter app in [`mobile/`](mobile/README.md) for iOS and Android. The Next.js PWA in this folder is the earlier web prototype.
 
 Play in the spaces between things.
 
