@@ -38,6 +38,16 @@ Full-bleed floor/wall textures under the kolam.
 | `courtyard_cement.png` | Everyday fallback |
 | `festival_floor.png` | Rangoli |
 
+## 3×3 kolams — `assets/kolams/3x3/`
+
+Drop the six reference drawings here. We will trace each one into First Dots — no approximations.
+
+| File | Grid |
+| --- | --- |
+| `k1.png` … `k6.png` | Classic 3×3 pulli, one kolam per file |
+
+Square PNG, high contrast, one drawing per image. Name them `k1.png` through `k6.png` in any order; we will match the paths, not regenerate them.
+
 ## World photos
 
 IRL / AR community photos should stay **user submissions**, not bundled stock. Do not drop residential location pins into the app.

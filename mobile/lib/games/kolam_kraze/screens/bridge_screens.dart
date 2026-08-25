@@ -17,6 +17,13 @@ class DailyScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     final app = AppScope.of(context);
     final daily = KolamCatalog.dailyFor(DateTime.now());
+    if (daily == null) {
+      return Scaffold(
+        backgroundColor: AarlaColors.ivory,
+        appBar: AppBar(title: const Text("Today's Kolam")),
+        body: const Center(child: Text('No kolams yet.')),
+      );
+    }
     final key = '${DateTime.now().year}-${DateTime.now().month}-${DateTime.now().day}';
     final done = app.store.lastDailyKey == key;
 
@@ -169,7 +176,11 @@ class _IrlScreenState extends State<IrlScreen> {
   @override
   Widget build(BuildContext context) {
     final app = AppScope.of(context);
-    final item = KolamCatalog.tryById(app.patternId) ?? KolamCatalog.items.first;
+    final item = KolamCatalog.tryById(app.patternId) ?? CatalogItem(
+      pattern: KolamCatalog.placeholder,
+      world: PatternWorld.firstDots,
+      levelNumber: 0,
+    );
     return Scaffold(
       backgroundColor: AarlaColors.charcoal,
       appBar: AppBar(
@@ -246,7 +257,11 @@ class _ArScreenState extends State<ArScreen> {
   @override
   Widget build(BuildContext context) {
     final app = AppScope.of(context);
-    final item = KolamCatalog.tryById(app.patternId) ?? KolamCatalog.items.first;
+    final item = KolamCatalog.tryById(app.patternId) ?? CatalogItem(
+      pattern: KolamCatalog.placeholder,
+      world: PatternWorld.firstDots,
+      levelNumber: 0,
+    );
     app.arSurface = _surface;
     app.arInstant = _instant;
 
@@ -448,7 +463,7 @@ class _WorldScreenState extends State<WorldScreen> with SingleTickerProviderStat
               ),
               caption: s['caption'] as String? ?? '',
               featured: s['featured'] == true,
-              patternId: s['patternId'] as String? ?? 'moolai-siluvai',
+              patternId: s['patternId'] as String? ?? '',
             ));
     return [...approved, ...seededWorld];
   }
@@ -518,7 +533,7 @@ class _Feed extends StatelessWidget {
       itemCount: posts.length,
       itemBuilder: (context, i) {
         final p = posts[i];
-        final pattern = KolamCatalog.tryById(p.patternId)?.pattern ?? KolamCatalog.items.first.pattern;
+        final pattern = KolamCatalog.tryById(p.patternId)?.pattern ?? KolamCatalog.placeholder;
         return Container(
           padding: const EdgeInsets.all(10),
           decoration: BoxDecoration(color: Colors.white, borderRadius: BorderRadius.circular(20)),

@@ -12,7 +12,7 @@ class AppController extends ChangeNotifier {
   final AppStore store;
 
   PlayMode mode = PlayMode.memory;
-  String patternId = 'moolai-siluvai';
+  String patternId = '';
   bool daily = false;
   ScoreResult? lastScore;
   List<List<Offset>> lastStrokes = const [];

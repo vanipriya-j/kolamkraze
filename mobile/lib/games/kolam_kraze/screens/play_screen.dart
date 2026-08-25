@@ -63,7 +63,8 @@ class _PlayScreenState extends State<PlayScreen> {
 
   double _previewSeconds() {
     final app = AppScope.of(context);
-    final item = KolamCatalog.byId(app.patternId);
+    final item = KolamCatalog.tryById(app.patternId);
+    if (item == null) return 3;
     var seconds = item.pattern.previewSeconds;
     if (app.mode == PlayMode.flash) {
       if (item.pattern.difficulty >= 7) {
@@ -144,7 +145,8 @@ class _PlayScreenState extends State<PlayScreen> {
     final board = _board.currentState;
     final strokes = board?.strokes ?? _strokes;
     final size = board?.canvasSize ?? const Size(400, 400);
-    final item = KolamCatalog.byId(app.patternId);
+    final item = KolamCatalog.tryById(app.patternId);
+    if (item == null) return;
     final result = KolamScorer.score(
       pattern: item.pattern,
       playerStrokes: strokes,
@@ -173,7 +175,14 @@ class _PlayScreenState extends State<PlayScreen> {
   @override
   Widget build(BuildContext context) {
     final app = AppScope.of(context);
-    final item = KolamCatalog.byId(app.patternId);
+    final item = KolamCatalog.tryById(app.patternId);
+    if (item == null) {
+      return Scaffold(
+        backgroundColor: AarlaColors.ivory,
+        appBar: AppBar(title: const Text('Play')),
+        body: const Center(child: Text('No kolam selected.')),
+      );
+    }
     final drawing = _phase == _Phase.draw;
     final showPattern = !drawing || _peeking || app.mode == PlayMode.copy;
     final wide = MediaQuery.sizeOf(context).shortestSide >= 600 && app.mode == PlayMode.copy;

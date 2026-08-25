@@ -37,7 +37,13 @@ void main() {
     await tester.pump(const Duration(milliseconds: 300));
     expect(find.text('PLAY'), findsOneWidget);
     expect(find.byKey(const Key('landing-sikku')), findsOneWidget);
-    await tester.scrollUntilVisible(find.text("TODAY'S KOLAM"), 200);
-    expect(find.text("TODAY'S KOLAM"), findsOneWidget);
+    expect(find.textContaining('No playable kolams yet'), findsOneWidget);
+    expect(find.text("TODAY'S KOLAM"), findsNothing);
+
+    await tester.tap(find.text('PLAY'));
+    await tester.pumpAndSettle();
+    await tester.tap(find.text('MEMORY'));
+    await tester.pumpAndSettle();
+    expect(find.textContaining('No kolams yet'), findsOneWidget);
   });
 }

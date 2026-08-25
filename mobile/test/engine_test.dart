@@ -33,20 +33,22 @@ void main() {
       expect(paths, hasLength(6));
     });
 
-    test('a bindu loop goes around the pulli, not through a diamond edge', () {
+    test('a bindu loop is a petal around the pulli, not a circle', () {
       const size = Size(300, 300);
-      final pattern = KolamCatalog.byId('bindu-3').pattern;
+      final pattern = bindu(id: 'bindu-3', rows: 3, columns: 3);
       final layout = GridLayout.fromSize(pattern.rows, pattern.columns, size);
       final samples = expandStroke(pattern.strokes.first, layout);
       final pulli = layout.dot(1, 1);
       var minD = double.infinity;
+      var maxD = 0.0;
       for (final p in samples) {
         final d = (p - pulli).distance;
         if (d < minD) minD = d;
+        if (d > maxD) maxD = d;
       }
-      // Straight cardinal chords sit ~0.35 cell from the pulli.
-      expect(minD, greaterThan(0.42 * layout.cell));
-      expect(minD, lessThan(0.58 * layout.cell));
+      expect(minD, greaterThan(0.38 * layout.cell));
+      expect(maxD, lessThan(0.58 * layout.cell));
+      expect((maxD - minD) / minD, greaterThan(0.08));
     });
 
     test('a 3×3 sikku from cell joins is a closed weave', () {
@@ -59,44 +61,24 @@ void main() {
   });
 
   group('catalog', () {
-    test('every level has a unique id and at least one stroke', () {
-      final ids = KolamCatalog.items.map((e) => e.pattern.id).toSet();
-      expect(ids.length, KolamCatalog.items.length);
-      expect(KolamCatalog.items.every((e) => e.pattern.strokes.isNotEmpty), isTrue);
-      expect(KolamCatalog.items.first.pattern.rows, 3);
-      expect(KolamCatalog.items.last.pattern.rows, 15);
+    test('playable catalog is empty until the six 3×3 references are traced', () {
+      expect(KolamCatalog.items, isEmpty);
+      expect(KolamCatalog.filtered(world: PatternWorld.firstDots), isEmpty);
+      expect(KolamCatalog.dailyFor(DateTime.now()), isNull);
     });
 
     test('json round-trips a pattern', () {
-      final original = KolamCatalog.byId('moolai-siluvai').pattern;
+      final original = moolaiSiluvaiKolam(id: 'moolai-siluvai', rows: 3, columns: 3);
       final copy = KolamPattern.fromJson(original.toJson());
       expect(copy.id, original.id);
       expect(copy.strokes.length, original.strokes.length);
       expect(copy.rows, 3);
     });
-
-    test('First Dots is the 3×3 sikku set', () {
-      final first = KolamCatalog.filtered(world: PatternWorld.firstDots);
-      expect(first.every((e) => e.pattern.rows == 3 && e.pattern.columns == 3), isTrue);
-      expect(first.map((e) => e.pattern.id).toList(), [
-        'bindu-3',
-        'sikku-malar',
-        'sikku-neli',
-        'sikku-prakara',
-        'sikku-mudi',
-        'sikku-padi',
-        'siluvai-3',
-        'moolai-3',
-        'moolai-siluvai',
-      ]);
-      expect(KolamCatalog.byId('sikku-neli').pattern.strokes, hasLength(1));
-      expect(KolamCatalog.byId('kambi-4h').world, PatternWorld.growing);
-    });
   });
 
   group('scoring', () {
     test('an empty drawing scores poorly', () {
-      final pattern = KolamCatalog.byId('bindu-3').pattern;
+      final pattern = bindu(id: 'bindu-3', rows: 3, columns: 3);
       final result = KolamScorer.score(
         pattern: pattern,
         playerStrokes: const [],
@@ -109,7 +91,7 @@ void main() {
 
     test('tracing the intended path scores highly', () {
       const size = Size(400, 400);
-      final pattern = KolamCatalog.byId('moolai-siluvai').pattern;
+      final pattern = moolaiSiluvaiKolam(id: 'moolai-siluvai', rows: 3, columns: 3);
       final samples = samplePattern(pattern, size);
       final result = KolamScorer.score(
         pattern: pattern,

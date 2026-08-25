@@ -21,7 +21,23 @@ class ResultsScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final app = AppScope.of(context);
-    final item = KolamCatalog.byId(app.patternId);
+    final item = KolamCatalog.tryById(app.patternId);
+    if (item == null) {
+      return Scaffold(
+        backgroundColor: AarlaColors.ivory,
+        body: SafeArea(
+          child: Center(
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                const Text('No kolam selected.'),
+                TextButton(onPressed: () => context.go('/home'), child: const Text('Home')),
+              ],
+            ),
+          ),
+        ),
+      );
+    }
     final score = app.lastScore;
     final stars = score?.stars ?? 0;
     final offerBreak = app.store.levelsSinceBreak >= 3;
@@ -135,8 +151,12 @@ class ResultsScreen extends StatelessWidget {
   }
 
   void _next(BuildContext context, AppController app, CatalogItem item) {
+    if (KolamCatalog.items.isEmpty) {
+      context.go('/home');
+      return;
+    }
     final i = KolamCatalog.items.indexWhere((e) => e.pattern.id == item.pattern.id);
-    final next = KolamCatalog.items[(i + 1) % KolamCatalog.items.length];
+    final next = KolamCatalog.items[(i < 0 ? 0 : i + 1) % KolamCatalog.items.length];
     app.selectLevel(next.pattern.id, dailyPlay: false);
     context.go('/play/material');
   }
