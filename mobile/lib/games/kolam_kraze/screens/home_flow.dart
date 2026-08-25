@@ -7,6 +7,7 @@ import '../../../core/design/colors.dart';
 import '../levels/catalog.dart';
 import '../models/enums.dart';
 import '../widgets/kolam_canvas.dart';
+import '../widgets/landing_sikku.dart';
 
 class HomeScreen extends StatelessWidget {
   const HomeScreen({super.key});
@@ -29,7 +30,14 @@ class HomeScreen extends StatelessWidget {
             Text('Kolam Kraze', style: Theme.of(context).textTheme.displayMedium?.copyWith(color: AarlaColors.ivory)),
             const SizedBox(height: 6),
             Text('Can you reproduce the kolam?', style: TextStyle(color: AarlaColors.ivory.withValues(alpha: 0.72), fontSize: 16)),
-            const SizedBox(height: 28),
+            const SizedBox(height: 18),
+            Align(
+              child: ConstrainedBox(
+                constraints: const BoxConstraints(maxWidth: 248, maxHeight: 248),
+                child: const LandingSikku(key: Key('landing-sikku')),
+              ),
+            ),
+            const SizedBox(height: 18),
             SizedBox(
               height: 132,
               child: FilledButton(

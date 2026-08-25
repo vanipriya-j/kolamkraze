@@ -4,9 +4,9 @@ import 'package:go_router/go_router.dart';
 import '../../../app/app_controller.dart';
 import '../../../core/design/assets.dart';
 import '../../../core/design/colors.dart';
-import '../engine/builders.dart';
 import '../models/enums.dart';
 import '../widgets/kolam_canvas.dart';
+import '../widgets/landing_sikku.dart';
 
 class OnboardingScreen extends StatefulWidget {
   const OnboardingScreen({super.key});
@@ -38,7 +38,7 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: _index == 0 ? AarlaColors.maroonDeep : AarlaColors.ivory,
+      backgroundColor: _index == 0 ? AarlaColors.kaaviDeep : AarlaColors.ivory,
       body: SafeArea(
         child: Column(
           children: [
@@ -85,12 +85,11 @@ class _Splash extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final pattern = moolaiSiluvaiKolam(id: 'splash', rows: 5, columns: 5);
     return Padding(
       padding: const EdgeInsets.all(28),
       child: Column(
         children: [
-          const Spacer(),
+          const Spacer(flex: 1),
           const Text(
             'AARLA PLAY',
             style: TextStyle(color: AarlaColors.turmeric, letterSpacing: 3, fontWeight: FontWeight.w700, fontSize: 12),
@@ -102,16 +101,27 @@ class _Splash extends StatelessWidget {
           ),
           const SizedBox(height: 8),
           const Text('Draw. Remember. Celebrate.', style: TextStyle(color: Color(0xFFE9C9B0), fontSize: 18)),
-          const SizedBox(height: 28),
-          SizedBox(
-            height: 240,
-            child: OptionalAssetImage(
-              asset: AarlaAssets.mark,
-              fit: BoxFit.contain,
-              fallback: KolamThumb(pattern: pattern, material: KolamMaterial.chalkpiece, kaavi: true),
+          const SizedBox(height: 16),
+          Expanded(
+            flex: 5,
+            child: LayoutBuilder(
+              builder: (context, constraints) {
+                final side = constraints.biggest.shortestSide;
+                return Center(
+                  child: SizedBox(
+                    width: side,
+                    height: side,
+                    child: const LandingSikku(
+                      key: Key('landing-sikku'),
+                      fillBackground: false,
+                      cornerRadius: 0,
+                    ),
+                  ),
+                );
+              },
             ),
           ),
-          const Spacer(),
+          const SizedBox(height: 12),
           AarlaButton(label: 'GET STARTED', onTap: onStart, color: AarlaColors.oxide),
         ],
       ),
