@@ -5,6 +5,7 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:kolam_kraze/games/kolam_kraze/engine/builders.dart';
 import 'package:kolam_kraze/games/kolam_kraze/engine/geometry.dart';
 import 'package:kolam_kraze/games/kolam_kraze/levels/catalog.dart';
+import 'package:kolam_kraze/games/kolam_kraze/models/enums.dart';
 import 'package:kolam_kraze/games/kolam_kraze/models/pattern.dart';
 import 'package:kolam_kraze/games/kolam_kraze/scoring/scorer.dart';
 
@@ -30,6 +31,22 @@ void main() {
       final paths = moolaiSiluvai(3);
       expect(paths, hasLength(6));
     });
+
+    test('a bindu loop goes around the pulli, not through a diamond edge', () {
+      const size = Size(300, 300);
+      final pattern = KolamCatalog.byId('bindu-3').pattern;
+      final layout = GridLayout.fromSize(pattern.rows, pattern.columns, size);
+      final samples = expandStroke(pattern.strokes.first, layout);
+      final pulli = layout.dot(1, 1);
+      var minD = double.infinity;
+      for (final p in samples) {
+        final d = (p - pulli).distance;
+        if (d < minD) minD = d;
+      }
+      // Straight cardinal chords sit ~0.35 cell from the pulli.
+      expect(minD, greaterThan(0.42 * layout.cell));
+      expect(minD, lessThan(0.58 * layout.cell));
+    });
   });
 
   group('catalog', () {
@@ -47,6 +64,24 @@ void main() {
       expect(copy.id, original.id);
       expect(copy.strokes.length, original.strokes.length);
       expect(copy.rows, 3);
+    });
+
+    test('First Dots is the classic 3×3 set', () {
+      final first = KolamCatalog.filtered(world: PatternWorld.firstDots);
+      expect(first.every((e) => e.pattern.rows == 3 && e.pattern.columns == 3), isTrue);
+      expect(first.map((e) => e.pattern.id).toList(), [
+        'bindu-3',
+        'kambi-3h',
+        'kambi-3v',
+        'siluvai-3',
+        'moolai-3',
+        'kuttu-3',
+        'moolai-siluvai',
+        'irani-3',
+        'prakara-3',
+      ]);
+      expect(KolamCatalog.byId('kuttu-3').pattern.strokes, hasLength(1));
+      expect(KolamCatalog.byId('kambi-4h').world, PatternWorld.growing);
     });
   });
 
