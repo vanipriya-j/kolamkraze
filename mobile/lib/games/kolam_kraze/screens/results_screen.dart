@@ -49,10 +49,19 @@ class ResultsScreen extends StatelessWidget {
               ),
             ),
             const SizedBox(height: 16),
-            Text(
-              '★' * stars + '☆' * (3 - stars),
-              textAlign: TextAlign.center,
-              style: const TextStyle(fontSize: 28, color: AarlaColors.turmeric),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: List.generate(3, (i) {
+                final filled = i < stars;
+                return Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 4),
+                  child: Icon(
+                    filled ? Icons.star_rounded : Icons.star_outline_rounded,
+                    color: filled ? AarlaColors.turmeric : AarlaColors.charcoal.withValues(alpha: 0.28),
+                    size: 34,
+                  ),
+                );
+              }),
             ),
             const SizedBox(height: 12),
             _Metric('Accuracy', '${score?.accuracy ?? 0}%'),
