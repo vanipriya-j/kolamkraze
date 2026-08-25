@@ -1,4 +1,5 @@
 import '../engine/builders.dart';
+import '../engine/sikku.dart';
 import '../models/enums.dart';
 import '../models/pattern.dart';
 
@@ -79,13 +80,76 @@ List<CatalogItem> _build() {
     note: 'A single pulli, held with a loop.',
   );
   add(
-    kambi(id: 'kambi-3h', rows: 3, columns: 3, vertical: false, previewSeconds: 4, timeLimitSeconds: 50),
+    sikkuKolam(
+      id: 'sikku-malar',
+      name: 'Malar',
+      a: SikkuJoin.backslash,
+      b: SikkuJoin.slash,
+      c: SikkuJoin.slash,
+      d: SikkuJoin.backslash,
+      previewSeconds: 5,
+      timeLimitSeconds: 70,
+    ),
     world: PatternWorld.firstDots,
-    note: 'A rice-flour line that gathers several pullis.',
+    note: 'A centre loop with a four-lobed sikku around the mid-side pullis.',
   );
   add(
-    kambi(id: 'kambi-3v', rows: 3, columns: 3, vertical: true, previewSeconds: 4, timeLimitSeconds: 50),
+    sikkuKolam(
+      id: 'sikku-neli',
+      name: 'Neli',
+      a: SikkuJoin.cross,
+      b: SikkuJoin.slash,
+      c: SikkuJoin.cross,
+      d: SikkuJoin.slash,
+      previewSeconds: 5,
+      timeLimitSeconds: 75,
+    ),
     world: PatternWorld.firstDots,
+    note: 'One continuous neli that weaves the 3×3 without lifting.',
+  );
+  add(
+    kolam(
+      id: 'sikku-prakara',
+      name: 'Prakara Bindu',
+      rows: 3,
+      difficulty: 2,
+      previewSeconds: 4,
+      timeLimitSeconds: 60,
+      strokes: [
+        stroke('c', loopAround(const GPoint(1, 1))),
+        stroke('o', enclosure(0, 0, 2, 2)),
+      ],
+    ),
+    world: PatternWorld.firstDots,
+    note: 'A small loop on the centre, then the outer walk around the eight.',
+  );
+  add(
+    sikkuKolam(
+      id: 'sikku-mudi',
+      name: 'Sikku Mudi',
+      a: SikkuJoin.slash,
+      b: SikkuJoin.cross,
+      c: SikkuJoin.cross,
+      d: SikkuJoin.backslash,
+      previewSeconds: 5,
+      timeLimitSeconds: 75,
+    ),
+    world: PatternWorld.firstDots,
+    note: 'A single knot that turns through the lattice.',
+  );
+  add(
+    sikkuKolam(
+      id: 'sikku-padi',
+      name: 'Padi',
+      a: SikkuJoin.slash,
+      b: SikkuJoin.backslash,
+      c: SikkuJoin.slash,
+      d: SikkuJoin.backslash,
+      previewSeconds: 5,
+      timeLimitSeconds: 70,
+    ),
+    world: PatternWorld.firstDots,
+    note: 'An indented sikku — same family, one side dips in.',
   );
   add(
     siluvai(id: 'siluvai-3', rows: 3, columns: 3, previewSeconds: 4, timeLimitSeconds: 55),
@@ -106,48 +170,9 @@ List<CatalogItem> _build() {
     note: 'A small loop around each corner pulli.',
   );
   add(
-    kolam(
-      id: 'kuttu-3',
-      name: 'Kuttu',
-      rows: 3,
-      difficulty: 2,
-      previewSeconds: 4,
-      timeLimitSeconds: 50,
-      strokes: [stroke('p1', enclosure(0, 0, 1, 1))],
-    ),
-    world: PatternWorld.firstDots,
-    note: 'Four pullis held in one enclosure.',
-  );
-  add(
     moolaiSiluvaiKolam(id: 'moolai-siluvai', rows: 3, columns: 3, previewSeconds: 5, timeLimitSeconds: 70),
     world: PatternWorld.firstDots,
     note: 'Corner loops with a crossing at the heart.',
-  );
-  add(
-    kolam(
-      id: 'irani-3',
-      name: 'Irani',
-      rows: 3,
-      difficulty: 2,
-      previewSeconds: 4,
-      timeLimitSeconds: 50,
-      strokes: [stroke('p1', figureEightH(GPoint(0, 1)))],
-    ),
-    world: PatternWorld.firstDots,
-    note: 'A sikku that crosses itself like a figure eight.',
-  );
-  add(
-    kolam(
-      id: 'prakara-3',
-      name: 'Prakara',
-      rows: 3,
-      difficulty: 2,
-      previewSeconds: 4,
-      timeLimitSeconds: 55,
-      strokes: [stroke('p1', enclosure(0, 0, 2, 2))],
-    ),
-    world: PatternWorld.firstDots,
-    note: 'The outer walk around every pulli.',
   );
 
   add(kambi(id: 'kambi-4h', rows: 4, columns: 4, vertical: false), world: PatternWorld.growing);
