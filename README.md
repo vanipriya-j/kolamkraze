@@ -4,11 +4,23 @@ Aarla Play’s first experience: a short-session kolam game.
 
 **See it. Remember it. Draw it.**
 
-The **current product** is the Flutter app in [`mobile/`](mobile/README.md) for iOS and Android. The Next.js PWA in this folder is the earlier web prototype.
+The **current product** is the Flutter app in [`mobile/`](mobile/README.md). Vercel hosts the **Flutter web** build. The Next.js PWA in this folder is the earlier prototype (`npm run dev`).
 
-Play in the spaces between things.
+## See it on Vercel
 
-## Local setup
+After this repo is deployed, open the Vercel preview on the PR, or the production domain for `main`.
+
+If a deploy still shows the old Next.js site, set the Vercel project **Framework Preset** to **Other** (Project Settings → General). `vercel.json` already points the build at Flutter.
+
+## Run Flutter locally
+
+```bash
+cd mobile
+flutter pub get
+flutter run -d chrome
+```
+
+## Next.js prototype (optional)
 
 ```bash
 npm install
