@@ -68,3 +68,8 @@ World submissions stay local and enter a moderation queue (Profile → Aarla des
 
 The first UI pass still uses painted surfaces. Drop production photos into `assets/` using the filenames in [`assets/README.md`](assets/README.md), then hot restart. The app falls back to the painter until those files exist.
 
+## Web (Vercel)
+
+The GitHub repo deploys **Flutter web** to Vercel (`scripts/build-flutter-web.sh`). Open the PR preview, or production after merge to `main`.
+
+
