@@ -45,7 +45,7 @@ class KolamCanvasState extends State<KolamCanvas> {
   final List<List<Offset>> _strokes = [];
   List<Offset> _live = [];
   Size _size = const Size(400, 400);
-  List<Offset> _expected = [];
+  List<List<Offset>> _expectedStrokes = [];
 
   List<List<Offset>> get strokes => List.unmodifiable(_strokes);
   Size get canvasSize => _size;
@@ -62,6 +62,7 @@ class KolamCanvasState extends State<KolamCanvas> {
     if (oldWidget.pattern.id != widget.pattern.id) {
       _strokes.clear();
       _live = [];
+      _expectedStrokes = [];
     }
   }
 
@@ -80,13 +81,13 @@ class KolamCanvasState extends State<KolamCanvas> {
   }
 
   void _ensureExpected(Size size) {
-    if (_size != size || _expected.isEmpty) {
+    if (_size != size || _expectedStrokes.isEmpty) {
       _size = size;
-      _expected = samplePattern(widget.pattern, size);
+      _expectedStrokes = samplePatternStrokes(widget.pattern, size);
     }
   }
 
-  Offset _assist(Offset p) => magnetize(p, _expected, radius: 32, strength: 0.32);
+  Offset _assist(Offset p) => magnetizeToStrokes(p, _expectedStrokes, radius: 32, strength: 0.32);
 
   void _start(Offset p) {
     widget.onStrokeStart?.call();

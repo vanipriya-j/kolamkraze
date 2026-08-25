@@ -58,7 +58,8 @@ class KolamScorer {
     required int peekUsed,
     Size canvasSize = const Size(400, 400),
   }) {
-    final expected = samplePattern(pattern, canvasSize);
+    final expectedStrokes = samplePatternStrokes(pattern, canvasSize);
+    final expected = expectedStrokes.expand((stroke) => stroke).toList();
     if (expected.isEmpty) {
       return const ScoreResult(
         accuracy: 0,
@@ -93,7 +94,7 @@ class KolamScorer {
 
     var stray = 0;
     for (final p in player) {
-      if (nearestDistance(p, expected) > mistakeRadius) stray++;
+      if (nearestDistanceToStrokes(p, expectedStrokes) > mistakeRadius) stray++;
     }
 
     final completion = expected.isEmpty

@@ -109,22 +109,50 @@ class KolamPainter extends CustomPainter {
   }
 
   void _paintPattern(Canvas canvas, Size size) {
-    final samples = samplePattern(pattern, size);
-    if (samples.length < 2) return;
-    final end = (samples.length * progress.clamp(0, 1)).floor().clamp(2, samples.length);
-    _paintStroke(canvas, samples.sublist(0, end), player: false, opacity: patternOpacity);
+    final layout = GridLayout.fromSize(pattern.rows, pattern.columns, size);
+    final strokes = [for (final s in pattern.strokes) expandStroke(s, layout)];
+    final total = strokes.fold<int>(0, (n, s) => n + s.length);
+    if (total < 2) return;
+    var remaining = (total * progress.clamp(0.0, 1.0)).round();
+    if (progress > 0 && remaining < 2) remaining = 2;
+    for (final stroke in strokes) {
+      if (remaining <= 0) break;
+      final take = remaining < stroke.length ? remaining : stroke.length;
+      if (take >= 2) {
+        _paintStroke(
+          canvas,
+          stroke.sublist(0, take),
+          player: false,
+          opacity: patternOpacity,
+          followSamples: true,
+        );
+      }
+      remaining -= stroke.length;
+    }
   }
 
-  void _paintStroke(Canvas canvas, List<Offset> pts, {required bool player, double opacity = 1}) {
+  void _paintStroke(
+    Canvas canvas,
+    List<Offset> pts, {
+    required bool player,
+    double opacity = 1,
+    bool followSamples = false,
+  }) {
     if (pts.length < 2) return;
     final path = Path()..moveTo(pts.first.dx, pts.first.dy);
-    for (var i = 1; i < pts.length; i++) {
-      final prev = pts[i - 1];
-      final cur = pts[i];
-      final mid = Offset((prev.dx + cur.dx) / 2, (prev.dy + cur.dy) / 2);
-      path.quadraticBezierTo(prev.dx, prev.dy, mid.dx, mid.dy);
+    if (followSamples) {
+      for (var i = 1; i < pts.length; i++) {
+        path.lineTo(pts[i].dx, pts[i].dy);
+      }
+    } else {
+      for (var i = 1; i < pts.length; i++) {
+        final prev = pts[i - 1];
+        final cur = pts[i];
+        final mid = Offset((prev.dx + cur.dx) / 2, (prev.dy + cur.dy) / 2);
+        path.quadraticBezierTo(prev.dx, prev.dy, mid.dx, mid.dy);
+      }
+      path.lineTo(pts.last.dx, pts.last.dy);
     }
-    path.lineTo(pts.last.dx, pts.last.dy);
 
     final color = _strokeColor(player).withValues(alpha: opacity);
     final width = _width();

@@ -166,7 +166,7 @@ KolamPattern kambi({
   final pts = vertical ? capsuleV(midC, 0, lastR) : capsuleH(0, midR, lastC);
   return kolam(
     id: id,
-    name: vertical ? 'Kambi' : 'Kambi',
+    name: vertical ? 'Kambi Vertical' : 'Kambi',
     rows: rows,
     columns: columns,
     difficulty: 2,

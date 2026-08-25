@@ -103,6 +103,20 @@ List<CatalogItem> _build() {
       strokes: strokesFrom(cornerLoops(3)),
     ),
     world: PatternWorld.firstDots,
+    note: 'A small loop around each corner pulli.',
+  );
+  add(
+    kolam(
+      id: 'kuttu-3',
+      name: 'Kuttu',
+      rows: 3,
+      difficulty: 2,
+      previewSeconds: 4,
+      timeLimitSeconds: 50,
+      strokes: [stroke('p1', enclosure(0, 0, 1, 1))],
+    ),
+    world: PatternWorld.firstDots,
+    note: 'Four pullis held in one enclosure.',
   );
   add(
     moolaiSiluvaiKolam(id: 'moolai-siluvai', rows: 3, columns: 3, previewSeconds: 5, timeLimitSeconds: 70),
@@ -120,6 +134,7 @@ List<CatalogItem> _build() {
       strokes: [stroke('p1', figureEightH(GPoint(0, 1)))],
     ),
     world: PatternWorld.firstDots,
+    note: 'A sikku that crosses itself like a figure eight.',
   );
   add(
     kolam(
@@ -132,10 +147,11 @@ List<CatalogItem> _build() {
       strokes: [stroke('p1', enclosure(0, 0, 2, 2))],
     ),
     world: PatternWorld.firstDots,
+    note: 'The outer walk around every pulli.',
   );
 
-  add(kambi(id: 'kambi-4h', rows: 4, columns: 4, vertical: false), world: PatternWorld.firstDots);
-  add(siluvai(id: 'siluvai-4', rows: 4, columns: 4), world: PatternWorld.firstDots);
+  add(kambi(id: 'kambi-4h', rows: 4, columns: 4, vertical: false), world: PatternWorld.growing);
+  add(siluvai(id: 'siluvai-4', rows: 4, columns: 4), world: PatternWorld.growing);
   add(
     kolam(
       id: 'moolai-4',
@@ -150,7 +166,7 @@ List<CatalogItem> _build() {
         stroke('v', capsuleV(1.5, 0, 3)),
       ],
     ),
-    world: PatternWorld.firstDots,
+    world: PatternWorld.growing,
   );
   add(
     kolam(
@@ -162,7 +178,7 @@ List<CatalogItem> _build() {
       timeLimitSeconds: 65,
       strokes: [stroke('p1', enclosure(0, 0, 3, 3))],
     ),
-    world: PatternWorld.firstDots,
+    world: PatternWorld.growing,
   );
 
   add(kambi(id: 'kambi-5h', rows: 5, columns: 5, vertical: false, previewSeconds: 3), world: PatternWorld.growing);

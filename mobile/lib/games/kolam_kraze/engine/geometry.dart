@@ -92,21 +92,121 @@ Offset magnetize(Offset p, List<Offset> expected, {double radius = 28, double st
   return Offset.lerp(p, n, strength)!;
 }
 
-List<Offset> sampleStroke(KolamStroke stroke, GridLayout layout, {int density = 12}) {
-  var pts = stroke.points.map(layout.point).toList();
-  if (stroke.closed && pts.isNotEmpty) {
-    pts = [...pts, pts.first];
+Offset magnetizeToStrokes(
+  Offset p,
+  List<List<Offset>> strokes, {
+  double radius = 28,
+  double strength = 0.35,
+}) {
+  if (strokes.isEmpty) return p;
+  Offset? best;
+  var bestD = double.infinity;
+  for (final stroke in strokes) {
+    if (stroke.length < 2) continue;
+    final n = nearestOnPolyline(p, stroke);
+    final d = (p - n).distance;
+    if (d < bestD) {
+      bestD = d;
+      best = n;
+    }
   }
-  return resamplePolyline(pts, math.max(24, pts.length * density));
+  if (best == null || bestD > radius) return p;
+  return Offset.lerp(p, best, strength)!;
+}
+
+double nearestDistanceToStrokes(Offset p, List<List<Offset>> strokes) {
+  var best = double.infinity;
+  for (final stroke in strokes) {
+    final d = nearestDistance(p, stroke);
+    if (d < best) best = d;
+  }
+  return best;
+}
+
+List<GPoint> _cardinalPullis(GPoint p) {
+  final x = (p.x * 2).round() / 2.0;
+  final y = (p.y * 2).round() / 2.0;
+  final xHalf = (x * 2).round().abs() % 2 == 1;
+  final yHalf = (y * 2).round().abs() % 2 == 1;
+  if (xHalf && !yHalf) {
+    return [GPoint(x - 0.5, y), GPoint(x + 0.5, y)];
+  }
+  if (yHalf && !xHalf) {
+    return [GPoint(x, y - 0.5), GPoint(x, y + 0.5)];
+  }
+  return const [];
+}
+
+GPoint? sharedPulli(GPoint a, GPoint b) {
+  final pa = _cardinalPullis(a);
+  final pb = _cardinalPullis(b);
+  for (final p in pa) {
+    for (final q in pb) {
+      if (p == q) return p;
+    }
+  }
+  return null;
+}
+
+/// Turns lattice points into a kolam curve: circular quarter-arcs around pullis, straight kambi runs.
+List<Offset> expandStroke(KolamStroke stroke, GridLayout layout, {int arcSteps = 12}) {
+  if (stroke.points.isEmpty) return const [];
+  final pts = [...stroke.points];
+  if (stroke.closed && pts.first != pts.last) {
+    pts.add(pts.first);
+  }
+  final out = <Offset>[layout.point(pts.first)];
+  for (var i = 1; i < pts.length; i++) {
+    final a = pts[i - 1];
+    final b = pts[i];
+    final pulli = sharedPulli(a, b);
+    if (pulli != null && a != b) {
+      out.addAll(_circularArc(layout.point(a), layout.point(b), layout.point(pulli), arcSteps).skip(1));
+    } else {
+      final start = out.last;
+      final end = layout.point(b);
+      final steps = math.max(1, ((end - start).distance / 5).round());
+      for (var s = 1; s <= steps; s++) {
+        out.add(Offset.lerp(start, end, s / steps)!);
+      }
+    }
+  }
+  return out;
+}
+
+List<Offset> _circularArc(Offset start, Offset end, Offset center, int steps) {
+  var a0 = math.atan2(start.dy - center.dy, start.dx - center.dx);
+  var a1 = math.atan2(end.dy - center.dy, end.dx - center.dx);
+  var delta = a1 - a0;
+  while (delta > math.pi) {
+    delta -= 2 * math.pi;
+  }
+  while (delta < -math.pi) {
+    delta += 2 * math.pi;
+  }
+  final radius = (start - center).distance;
+  if (radius < 0.001) return [start, end];
+  final out = <Offset>[start];
+  for (var s = 1; s <= steps; s++) {
+    final ang = a0 + delta * (s / steps);
+    out.add(Offset(center.dx + radius * math.cos(ang), center.dy + radius * math.sin(ang)));
+  }
+  return out;
+}
+
+List<Offset> sampleStroke(KolamStroke stroke, GridLayout layout, {int density = 12}) {
+  final curved = expandStroke(stroke, layout, arcSteps: math.max(8, density));
+  if (curved.length < 2) return curved;
+  return resamplePolyline(curved, math.max(24, curved.length));
+}
+
+List<List<Offset>> samplePatternStrokes(KolamPattern pattern, Size size) {
+  final layout = GridLayout.fromSize(pattern.rows, pattern.columns, size);
+  return [for (final stroke in pattern.strokes) sampleStroke(stroke, layout)];
 }
 
 List<Offset> samplePattern(KolamPattern pattern, Size size) {
-  final layout = GridLayout.fromSize(pattern.rows, pattern.columns, size);
-  final out = <Offset>[];
-  for (final stroke in pattern.strokes) {
-    out.addAll(sampleStroke(stroke, layout));
-  }
-  return out;
+  return samplePatternStrokes(pattern, size).expand((stroke) => stroke).toList();
 }
 
 double _pointToSegment(Offset p, Offset a, Offset b) {
