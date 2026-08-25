@@ -4,6 +4,7 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:kolam_kraze/games/kolam_kraze/engine/builders.dart';
 import 'package:kolam_kraze/games/kolam_kraze/engine/geometry.dart';
+import 'package:kolam_kraze/games/kolam_kraze/engine/sikku.dart';
 import 'package:kolam_kraze/games/kolam_kraze/levels/catalog.dart';
 import 'package:kolam_kraze/games/kolam_kraze/models/enums.dart';
 import 'package:kolam_kraze/games/kolam_kraze/models/pattern.dart';
@@ -47,6 +48,14 @@ void main() {
       expect(minD, greaterThan(0.42 * layout.cell));
       expect(minD, lessThan(0.58 * layout.cell));
     });
+
+    test('a 3×3 sikku from cell joins is a closed weave', () {
+      final plus = sikkuJoins(SikkuJoin.cross, SikkuJoin.cross, SikkuJoin.cross, SikkuJoin.cross);
+      expect(plus, hasLength(2));
+      final oneLine = sikkuJoins(SikkuJoin.cross, SikkuJoin.slash, SikkuJoin.cross, SikkuJoin.slash);
+      expect(oneLine, hasLength(1));
+      expect(oneLine.first.length, greaterThan(8));
+    });
   });
 
   group('catalog', () {
@@ -66,21 +75,21 @@ void main() {
       expect(copy.rows, 3);
     });
 
-    test('First Dots is the classic 3×3 set', () {
+    test('First Dots is the 3×3 sikku set', () {
       final first = KolamCatalog.filtered(world: PatternWorld.firstDots);
       expect(first.every((e) => e.pattern.rows == 3 && e.pattern.columns == 3), isTrue);
       expect(first.map((e) => e.pattern.id).toList(), [
         'bindu-3',
-        'kambi-3h',
-        'kambi-3v',
+        'sikku-malar',
+        'sikku-neli',
+        'sikku-prakara',
+        'sikku-mudi',
+        'sikku-padi',
         'siluvai-3',
         'moolai-3',
-        'kuttu-3',
         'moolai-siluvai',
-        'irani-3',
-        'prakara-3',
       ]);
-      expect(KolamCatalog.byId('kuttu-3').pattern.strokes, hasLength(1));
+      expect(KolamCatalog.byId('sikku-neli').pattern.strokes, hasLength(1));
       expect(KolamCatalog.byId('kambi-4h').world, PatternWorld.growing);
     });
   });

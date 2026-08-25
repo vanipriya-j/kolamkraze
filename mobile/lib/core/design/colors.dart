@@ -14,7 +14,10 @@ class AarlaColors {
   static const charcoal = Color(0xFF241F1C);
   static const slate = Color(0xFF1B1E24);
   static const kaavi = Color(0xFF9C2A1A);
+  /// Terracotta field for the landing sikku (cream-on-kaavi).
+  static const kaaviDeep = Color(0xFF7B1113);
   static const cream = Color(0xFFFFF8EE);
+  static const kolamCream = Color(0xFFFFF9E5);
   static const pulli = Color(0xFFE8C9A0);
   static const stone = Color(0xFF6B5344);
 }

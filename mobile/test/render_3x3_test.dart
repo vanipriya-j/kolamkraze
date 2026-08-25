@@ -15,7 +15,7 @@ void main() {
     GoogleFonts.config.allowRuntimeFetching = false;
   });
 
-  test('classic 3×3 patterns paint as rounded enclosures', () async {
+  test('classic 3×3 patterns paint as rounded sikku weaves', () async {
     final first = KolamCatalog.filtered(world: PatternWorld.firstDots);
     expect(first, hasLength(9));
 
