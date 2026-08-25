@@ -67,6 +67,7 @@ flutter:
     - assets/branding/
     - assets/materials/
     - assets/surfaces/
+    - assets/kolams/3x3/
 
   # To add assets to your application, add an assets section, like this:
   # assets:

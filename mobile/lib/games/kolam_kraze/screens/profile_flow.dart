@@ -239,7 +239,18 @@ class _MyKolamsScreenState extends State<MyKolamsScreen> {
             ),
           ),
           Expanded(
-            child: GridView.builder(
+            child: items.isEmpty
+                ? const Center(
+                    child: Padding(
+                      padding: EdgeInsets.all(32),
+                      child: Text(
+                        'No kolams yet.\nUpload the six 3×3 references and we will match each one.',
+                        textAlign: TextAlign.center,
+                        style: TextStyle(fontSize: 16, height: 1.4),
+                      ),
+                    ),
+                  )
+                : GridView.builder(
               padding: const EdgeInsets.all(16),
               gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(crossAxisCount: 2, childAspectRatio: 0.62, mainAxisSpacing: 12, crossAxisSpacing: 12),
               itemCount: items.length,

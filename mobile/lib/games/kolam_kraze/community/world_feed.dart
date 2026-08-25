@@ -11,7 +11,7 @@ class WorldPost {
     required this.caption,
     this.featured = false,
     this.instagram,
-    this.patternId = 'moolai-siluvai',
+    this.patternId = '',
   });
 
   final String id;
@@ -29,64 +29,5 @@ class WorldPost {
   String get how => kind == 'irl' ? 'Drawn IRL · ${material.label}' : 'Placed in AR · ${material.label}';
 }
 
-const seededWorld = <WorldPost>[
-  WorldPost(
-    id: 'w1',
-    displayName: 'Meenakshi',
-    city: 'Chennai',
-    country: 'India',
-    kind: 'irl',
-    material: KolamMaterial.ezhaiKolam,
-    caption: 'Before sunrise, on the threshold.',
-    featured: true,
-  ),
-  WorldPost(
-    id: 'w2',
-    displayName: 'Priya',
-    city: 'Toronto',
-    country: 'Canada',
-    kind: 'ar',
-    material: KolamMaterial.kolaMaavu,
-    caption: 'Apartment hallway, Friday evening.',
-    featured: true,
-  ),
-  WorldPost(
-    id: 'w3',
-    displayName: 'Arun',
-    city: 'Singapore',
-    country: 'Singapore',
-    kind: 'irl',
-    material: KolamMaterial.rangoli,
-    caption: 'Pongal weekend at the community hall.',
-  ),
-  WorldPost(
-    id: 'w4',
-    displayName: 'Kavya',
-    city: 'London',
-    country: 'UK',
-    kind: 'ar',
-    material: KolamMaterial.chalkpiece,
-    caption: 'A slate of light on a rainy afternoon.',
-  ),
-  WorldPost(
-    id: 'w5',
-    displayName: 'Nila',
-    city: 'Madurai',
-    country: 'India',
-    kind: 'irl',
-    material: KolamMaterial.kolaMaavu,
-    caption: 'Kaavi border, still drying.',
-    featured: true,
-    patternId: 'padi-5',
-  ),
-  WorldPost(
-    id: 'w6',
-    displayName: 'Sam',
-    city: 'Austin',
-    country: 'USA',
-    kind: 'ar',
-    material: KolamMaterial.rangoli,
-    caption: 'Festival floor in the living room.',
-    patternId: 'nested-5',
-  ),
-];
+/// Empty until the six 3×3 references are in the catalog.
+const seededWorld = <WorldPost>[];

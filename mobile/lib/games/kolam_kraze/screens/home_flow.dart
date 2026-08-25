@@ -42,7 +42,6 @@ class HomeScreen extends StatelessWidget {
               height: 132,
               child: FilledButton(
                 onPressed: () {
-                  AppScope.of(context);
                   context.push('/play/mode');
                 },
                 style: FilledButton.styleFrom(
@@ -52,44 +51,54 @@ class HomeScreen extends StatelessWidget {
                 child: const Text('PLAY', style: TextStyle(fontSize: 42, fontWeight: FontWeight.w800, letterSpacing: 4, color: AarlaColors.ivory)),
               ),
             ),
+            if (KolamCatalog.isEmpty) ...[
+              const SizedBox(height: 14),
+              Text(
+                'No playable kolams yet. Upload six 3×3 references and we will match each one.',
+                textAlign: TextAlign.center,
+                style: TextStyle(color: AarlaColors.ivory.withValues(alpha: 0.72), height: 1.4),
+              ),
+            ],
             const SizedBox(height: 22),
-            const SectionLabel("Today's Kolam", light: true),
-            const SizedBox(height: 10),
-            GestureDetector(
-              onTap: () {
-                app.selectLevel(daily.pattern.id, dailyPlay: true);
-                context.push('/daily');
-              },
-              child: Container(
-                padding: const EdgeInsets.all(14),
-                decoration: BoxDecoration(
-                  color: AarlaColors.ivory.withValues(alpha: 0.08),
-                  borderRadius: BorderRadius.circular(24),
-                  border: Border.all(color: AarlaColors.ivory.withValues(alpha: 0.12)),
-                ),
-                child: Row(
-                  children: [
-                    SizedBox(width: 92, child: KolamThumb(pattern: daily.pattern, kaavi: app.kaavi, material: app.material)),
-                    const SizedBox(width: 14),
-                    Expanded(
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Text(daily.pattern.name, style: const TextStyle(color: AarlaColors.ivory, fontWeight: FontWeight.w800, fontSize: 18)),
-                          Text(
-                            '${daily.pattern.rows}×${daily.pattern.columns}  ·  ${app.mode.label}',
-                            style: TextStyle(color: AarlaColors.ivory.withValues(alpha: 0.7)),
-                          ),
-                          const SizedBox(height: 10),
-                          Text(done ? 'Completed today' : 'Play Now', style: const TextStyle(color: AarlaColors.turmeric, fontWeight: FontWeight.w700)),
-                        ],
+            if (daily != null) ...[
+              const SectionLabel("Today's Kolam", light: true),
+              const SizedBox(height: 10),
+              GestureDetector(
+                onTap: () {
+                  app.selectLevel(daily.pattern.id, dailyPlay: true);
+                  context.push('/daily');
+                },
+                child: Container(
+                  padding: const EdgeInsets.all(14),
+                  decoration: BoxDecoration(
+                    color: AarlaColors.ivory.withValues(alpha: 0.08),
+                    borderRadius: BorderRadius.circular(24),
+                    border: Border.all(color: AarlaColors.ivory.withValues(alpha: 0.12)),
+                  ),
+                  child: Row(
+                    children: [
+                      SizedBox(width: 92, child: KolamThumb(pattern: daily.pattern, kaavi: app.kaavi, material: app.material)),
+                      const SizedBox(width: 14),
+                      Expanded(
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Text(daily.pattern.name, style: const TextStyle(color: AarlaColors.ivory, fontWeight: FontWeight.w800, fontSize: 18)),
+                            Text(
+                              '${daily.pattern.rows}×${daily.pattern.columns}  ·  ${app.mode.label}',
+                              style: TextStyle(color: AarlaColors.ivory.withValues(alpha: 0.7)),
+                            ),
+                            const SizedBox(height: 10),
+                            Text(done ? 'Completed today' : 'Play Now', style: const TextStyle(color: AarlaColors.turmeric, fontWeight: FontWeight.w700)),
+                          ],
+                        ),
                       ),
-                    ),
-                  ],
+                    ],
+                  ),
                 ),
               ),
-            ),
-            const SizedBox(height: 22),
+              const SizedBox(height: 22),
+            ],
             GridView.count(
               crossAxisCount: 2,
               shrinkWrap: true,
@@ -241,7 +250,18 @@ class _LevelSelectScreenState extends State<LevelSelectScreen> {
             onSelect: (f) => setState(() => _filter = f),
           ),
           Expanded(
-            child: GridView.builder(
+            child: items.isEmpty
+                ? const Center(
+                    child: Padding(
+                      padding: EdgeInsets.all(32),
+                      child: Text(
+                        'No kolams yet.\nUpload the six 3×3 references and we will match each one.',
+                        textAlign: TextAlign.center,
+                        style: TextStyle(fontSize: 16, height: 1.4),
+                      ),
+                    ),
+                  )
+                : GridView.builder(
               padding: const EdgeInsets.fromLTRB(16, 8, 16, 24),
               gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
                 crossAxisCount: 2,
@@ -304,7 +324,14 @@ class MaterialSelectScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final app = AppScope.of(context);
-    final item = KolamCatalog.byId(app.patternId);
+    final item = KolamCatalog.tryById(app.patternId);
+    if (item == null) {
+      return Scaffold(
+        backgroundColor: AarlaColors.ivory,
+        appBar: AppBar(title: const Text('Choose material')),
+        body: const Center(child: Text('No kolam selected.')),
+      );
+    }
     return Scaffold(
       backgroundColor: AarlaColors.ivory,
       appBar: AppBar(title: const Text('Choose material')),
