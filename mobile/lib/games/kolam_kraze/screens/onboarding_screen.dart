@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 
 import '../../../app/app_controller.dart';
+import '../../../core/design/assets.dart';
 import '../../../core/design/colors.dart';
 import '../engine/builders.dart';
 import '../models/enums.dart';
@@ -102,7 +103,14 @@ class _Splash extends StatelessWidget {
           const SizedBox(height: 8),
           const Text('Draw. Remember. Celebrate.', style: TextStyle(color: Color(0xFFE9C9B0), fontSize: 18)),
           const SizedBox(height: 28),
-          SizedBox(height: 240, child: KolamThumb(pattern: pattern, material: KolamMaterial.chalkpiece, kaavi: true)),
+          SizedBox(
+            height: 240,
+            child: OptionalAssetImage(
+              asset: AarlaAssets.mark,
+              fit: BoxFit.contain,
+              fallback: KolamThumb(pattern: pattern, material: KolamMaterial.chalkpiece, kaavi: true),
+            ),
+          ),
           const Spacer(),
           AarlaButton(label: 'GET STARTED', onTap: onStart, color: AarlaColors.oxide),
         ],
@@ -192,17 +200,35 @@ class _Materials extends StatelessWidget {
           const SizedBox(height: 12),
           Container(
             width: double.infinity,
-            padding: const EdgeInsets.all(16),
+            padding: const EdgeInsets.all(12),
             decoration: BoxDecoration(
               color: AarlaColors.kaavi.withValues(alpha: 0.12),
               borderRadius: BorderRadius.circular(18),
               border: Border.all(color: AarlaColors.kaavi.withValues(alpha: 0.3)),
             ),
-            child: const Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
+            child: Row(
               children: [
-                Text('Kaavi', style: TextStyle(fontWeight: FontWeight.w800, color: AarlaColors.kaavi)),
-                Text('Optional brick-red accents and borders.'),
+                ClipRRect(
+                  borderRadius: BorderRadius.circular(12),
+                  child: SizedBox(
+                    width: 52,
+                    height: 52,
+                    child: OptionalAssetImage(
+                      asset: AarlaAssets.kaavi,
+                      fallback: const ColoredBox(color: AarlaColors.kaavi),
+                    ),
+                  ),
+                ),
+                const SizedBox(width: 12),
+                const Expanded(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text('Kaavi', style: TextStyle(fontWeight: FontWeight.w800, color: AarlaColors.kaavi)),
+                      Text('Optional brick-red accents and borders.'),
+                    ],
+                  ),
+                ),
               ],
             ),
           ),
@@ -224,17 +250,22 @@ class _Mat extends StatelessWidget {
       padding: const EdgeInsets.only(bottom: 8),
       child: Row(
         children: [
-          Container(
-            width: 14,
-            height: 14,
-            decoration: BoxDecoration(
-              color: switch (material) {
-                KolamMaterial.chalkpiece => AarlaColors.slate,
-                KolamMaterial.kolaMaavu => AarlaColors.oxide,
-                KolamMaterial.ezhaiKolam => AarlaColors.stone,
-                KolamMaterial.rangoli => AarlaColors.turmeric,
-              },
-              shape: BoxShape.circle,
+          ClipRRect(
+            borderRadius: BorderRadius.circular(10),
+            child: SizedBox(
+              width: 44,
+              height: 44,
+              child: OptionalAssetImage(
+                asset: AarlaAssets.material(material),
+                fallback: ColoredBox(
+                  color: switch (material) {
+                    KolamMaterial.chalkpiece => AarlaColors.slate,
+                    KolamMaterial.kolaMaavu => AarlaColors.oxide,
+                    KolamMaterial.ezhaiKolam => AarlaColors.stone,
+                    KolamMaterial.rangoli => AarlaColors.turmeric,
+                  },
+                ),
+              ),
             ),
           ),
           const SizedBox(width: 10),

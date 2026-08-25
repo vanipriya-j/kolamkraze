@@ -63,3 +63,8 @@ lib/
 Patterns are structural (`KolamPattern` + strokes on the pulli lattice), not images. The internal **Level editor** (Profile → Level editor) exports JSON.
 
 World submissions stay local and enter a moderation queue (Profile → Aarla desk). Nothing auto-publishes.
+
+## Images
+
+The first UI pass still uses painted surfaces. Drop production photos into `assets/` using the filenames in [`assets/README.md`](assets/README.md), then hot restart. The app falls back to the painter until those files exist.
+
