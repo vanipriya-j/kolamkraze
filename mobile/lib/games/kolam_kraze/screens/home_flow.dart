@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 
 import '../../../app/app_controller.dart';
+import '../../../core/design/assets.dart';
 import '../../../core/design/colors.dart';
 import '../levels/catalog.dart';
 import '../models/enums.dart';
@@ -225,24 +226,11 @@ class _LevelSelectScreenState extends State<LevelSelectScreen> {
       appBar: AppBar(title: Text('${app.mode.label} · Levels')),
       body: Column(
         children: [
-          SizedBox(
-            height: 48,
-            child: ListView(
-              scrollDirection: Axis.horizontal,
-              padding: const EdgeInsets.symmetric(horizontal: 16),
-              children: DifficultyFilter.values.map((f) {
-                final on = _filter == f;
-                return Padding(
-                  padding: const EdgeInsets.only(right: 8),
-                  child: ChoiceChip(
-                    label: Text(f.name.toUpperCase()),
-                    selected: on,
-                    onSelected: (_) => setState(() => _filter = f),
-                    selectedColor: AarlaColors.maroon.withValues(alpha: 0.15),
-                  ),
-                );
-              }).toList(),
-            ),
+          AarlaPills<DifficultyFilter>(
+            values: DifficultyFilter.values,
+            selected: _filter,
+            label: (f) => f.name,
+            onSelect: (f) => setState(() => _filter = f),
           ),
           Expanded(
             child: GridView.builder(
@@ -315,45 +303,53 @@ class MaterialSelectScreen extends StatelessWidget {
       body: ListView(
         padding: const EdgeInsets.fromLTRB(20, 8, 20, 28),
         children: [
-          ...KolamMaterial.values.map((m) {
-            final selected = app.material == m;
-            return GestureDetector(
+          ...KolamMaterial.values.map(
+            (m) => MaterialPreviewCard(
+              material: m,
+              pattern: item.pattern,
+              selected: app.material == m,
+              kaavi: app.kaavi,
               onTap: () => app.setMaterial(m),
-              child: AnimatedContainer(
-                duration: const Duration(milliseconds: 180),
-                margin: const EdgeInsets.only(bottom: 12),
-                padding: const EdgeInsets.all(12),
-                decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(24),
-                  border: Border.all(color: selected ? AarlaColors.maroon : AarlaColors.ivoryDeep, width: selected ? 2.4 : 1),
-                  color: Colors.white,
-                ),
-                child: Row(
-                  children: [
-                    SizedBox(width: 92, height: 92, child: KolamThumb(pattern: item.pattern, material: m, kaavi: app.kaavi)),
-                    const SizedBox(width: 14),
-                    Expanded(
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Text(m.label.toUpperCase(), style: const TextStyle(fontWeight: FontWeight.w800, letterSpacing: 0.8)),
-                          Text(m.description),
-                        ],
-                      ),
-                    ),
-                  ],
-                ),
-              ),
-            );
-          }),
+            ),
+          ),
           const SizedBox(height: 8),
-          SwitchListTile(
-            contentPadding: EdgeInsets.zero,
-            title: const Text('Add Kaavi', style: TextStyle(fontWeight: FontWeight.w800)),
-            subtitle: const Text('Brick-red accents & borders'),
-            value: app.kaavi,
-            activeThumbColor: AarlaColors.kaavi,
-            onChanged: app.setKaavi,
+          Container(
+            padding: const EdgeInsets.fromLTRB(16, 10, 10, 10),
+            decoration: BoxDecoration(
+              color: Colors.white,
+              borderRadius: BorderRadius.circular(20),
+              border: Border.all(color: AarlaColors.kaavi.withValues(alpha: 0.25)),
+            ),
+            child: Row(
+              children: [
+                ClipRRect(
+                  borderRadius: BorderRadius.circular(12),
+                  child: SizedBox(
+                    width: 48,
+                    height: 48,
+                    child: OptionalAssetImage(
+                      asset: AarlaAssets.kaavi,
+                      fallback: const ColoredBox(color: AarlaColors.kaavi),
+                    ),
+                  ),
+                ),
+                const SizedBox(width: 12),
+                const Expanded(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text('Add Kaavi', style: TextStyle(fontWeight: FontWeight.w800)),
+                      Text('Brick-red accents & borders'),
+                    ],
+                  ),
+                ),
+                Switch(
+                  value: app.kaavi,
+                  activeThumbColor: AarlaColors.kaavi,
+                  onChanged: app.setKaavi,
+                ),
+              ],
+            ),
           ),
           const SizedBox(height: 16),
           AarlaButton(

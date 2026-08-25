@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 
+import '../../../core/design/assets.dart';
 import '../../../core/design/colors.dart';
 import '../engine/geometry.dart';
 import '../models/enums.dart';
@@ -131,8 +132,19 @@ class KolamCanvasState extends State<KolamCanvas> {
           patternOpacity: widget.patternOpacity,
           guidance: widget.guidance,
           progress: widget.progress,
+          paintSurface: false,
         );
-        final child = CustomPaint(painter: painter, size: size);
+        final child = SizedBox(
+          width: size.width,
+          height: size.height,
+          child: Stack(
+            fit: StackFit.expand,
+            children: [
+              KolamSurface(material: widget.material, pattern: widget.pattern),
+              CustomPaint(painter: painter),
+            ],
+          ),
+        );
         if (!widget.interactive) return child;
         return GestureDetector(
           behavior: HitTestBehavior.opaque,
@@ -142,6 +154,30 @@ class KolamCanvasState extends State<KolamCanvas> {
           child: child,
         );
       },
+    );
+  }
+}
+
+class KolamSurface extends StatelessWidget {
+  const KolamSurface({super.key, required this.material, required this.pattern});
+
+  final KolamMaterial material;
+  final KolamPattern pattern;
+
+  @override
+  Widget build(BuildContext context) {
+    return OptionalAssetImage(
+      asset: AarlaAssets.surface(material),
+      fallback: CustomPaint(
+        painter: KolamPainter(
+          pattern: pattern,
+          material: material,
+          kaavi: false,
+          showPattern: false,
+          showDots: false,
+          paintSurface: true,
+        ),
+      ),
     );
   }
 }
@@ -166,15 +202,151 @@ class KolamThumb extends StatelessWidget {
       aspectRatio: 1,
       child: ClipRRect(
         borderRadius: BorderRadius.circular(16),
-        child: CustomPaint(
-          painter: KolamPainter(
-            pattern: pattern,
-            material: material,
-            kaavi: kaavi,
-            showPattern: showPattern,
-            showDots: true,
+        child: Stack(
+          fit: StackFit.expand,
+          children: [
+            KolamSurface(material: material, pattern: pattern),
+            CustomPaint(
+              painter: KolamPainter(
+                pattern: pattern,
+                material: material,
+                kaavi: kaavi,
+                showPattern: showPattern,
+                showDots: true,
+                paintSurface: false,
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+}
+
+class MaterialPreviewCard extends StatelessWidget {
+  const MaterialPreviewCard({
+    super.key,
+    required this.material,
+    required this.pattern,
+    required this.selected,
+    required this.kaavi,
+    required this.onTap,
+  });
+
+  final KolamMaterial material;
+  final KolamPattern pattern;
+  final bool selected;
+  final bool kaavi;
+  final VoidCallback onTap;
+
+  @override
+  Widget build(BuildContext context) {
+    return GestureDetector(
+      onTap: onTap,
+      child: AnimatedContainer(
+        duration: const Duration(milliseconds: 180),
+        height: 168,
+        margin: const EdgeInsets.only(bottom: 12),
+        decoration: BoxDecoration(
+          borderRadius: BorderRadius.circular(24),
+          border: Border.all(
+            color: selected ? AarlaColors.maroon : AarlaColors.ivoryDeep,
+            width: selected ? 2.5 : 1,
           ),
         ),
+        child: ClipRRect(
+          borderRadius: BorderRadius.circular(22),
+          child: Stack(
+            fit: StackFit.expand,
+            children: [
+              OptionalAssetImage(
+                asset: AarlaAssets.material(material),
+                fallback: KolamThumb(pattern: pattern, material: material, kaavi: kaavi),
+              ),
+              const DecoratedBox(
+                decoration: BoxDecoration(
+                  gradient: LinearGradient(
+                    begin: Alignment.topCenter,
+                    end: Alignment.bottomCenter,
+                    colors: [Color(0x00000000), Color(0xCC1A1210)],
+                  ),
+                ),
+              ),
+              Positioned(
+                left: 16,
+                right: 16,
+                bottom: 14,
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      material.label.toUpperCase(),
+                      style: const TextStyle(
+                        color: AarlaColors.ivory,
+                        fontWeight: FontWeight.w800,
+                        letterSpacing: 1.1,
+                      ),
+                    ),
+                    Text(material.description, style: const TextStyle(color: Color(0xFFE9D5C4))),
+                  ],
+                ),
+              ),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+}
+
+class AarlaPills<T> extends StatelessWidget {
+  const AarlaPills({
+    super.key,
+    required this.values,
+    required this.selected,
+    required this.label,
+    required this.onSelect,
+  });
+
+  final List<T> values;
+  final T selected;
+  final String Function(T) label;
+  final ValueChanged<T> onSelect;
+
+  @override
+  Widget build(BuildContext context) {
+    return SizedBox(
+      height: 44,
+      child: ListView(
+        scrollDirection: Axis.horizontal,
+        padding: const EdgeInsets.symmetric(horizontal: 16),
+        children: [
+          for (final value in values)
+            Padding(
+              padding: const EdgeInsets.only(right: 8),
+              child: GestureDetector(
+                onTap: () => onSelect(value),
+                child: AnimatedContainer(
+                  duration: const Duration(milliseconds: 160),
+                  padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 10),
+                  decoration: BoxDecoration(
+                    color: selected == value ? AarlaColors.maroon : Colors.white,
+                    borderRadius: BorderRadius.circular(20),
+                    border: Border.all(color: AarlaColors.maroon.withValues(alpha: selected == value ? 0 : 0.12)),
+                  ),
+                  child: Text(
+                    label(value).toUpperCase(),
+                    style: TextStyle(
+                      fontSize: 12,
+                      fontWeight: FontWeight.w700,
+                      letterSpacing: 0.8,
+                      color: selected == value ? AarlaColors.ivory : AarlaColors.charcoal,
+                    ),
+                  ),
+                ),
+              ),
+            ),
+        ],
       ),
     );
   }

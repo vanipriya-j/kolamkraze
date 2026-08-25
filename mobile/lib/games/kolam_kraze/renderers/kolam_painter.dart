@@ -18,6 +18,7 @@ class KolamPainter extends CustomPainter {
     this.patternOpacity = 1,
     this.guidance = false,
     this.progress = 1,
+    this.paintSurface = true,
   });
 
   final KolamPattern pattern;
@@ -30,10 +31,11 @@ class KolamPainter extends CustomPainter {
   final double patternOpacity;
   final bool guidance;
   final double progress;
+  final bool paintSurface;
 
   @override
   void paint(Canvas canvas, Size size) {
-    _paintSurface(canvas, size);
+    if (paintSurface) _paintSurface(canvas, size);
     if (kaavi) _paintKaavi(canvas, size);
     if (showDots) _paintDots(canvas, size);
     if (showPattern) _paintPattern(canvas, size);
@@ -245,5 +247,6 @@ class KolamPainter extends CustomPainter {
       old.progress != progress ||
       old.playerStrokes != playerStrokes ||
       old.liveStroke != liveStroke ||
-      old.showDots != showDots;
+      old.showDots != showDots ||
+      old.paintSurface != paintSurface;
 }
