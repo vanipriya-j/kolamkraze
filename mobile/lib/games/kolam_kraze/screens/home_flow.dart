@@ -34,7 +34,7 @@ class HomeScreen extends StatelessWidget {
             Align(
               child: ConstrainedBox(
                 constraints: const BoxConstraints(maxWidth: 248, maxHeight: 248),
-                child: const LandingSikku(key: Key('landing-sikku')),
+                child: const LandingMark(key: Key('landing-sikku')),
               ),
             ),
             const SizedBox(height: 18),

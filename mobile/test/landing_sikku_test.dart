@@ -40,7 +40,7 @@ void main() {
     File('/tmp/kolam-landing/landing_sikku.png').writeAsBytesSync(bytes);
   });
 
-  testWidgets('splash landing shows the diamond sikku', (tester) async {
+  testWidgets('splash landing shows the mark image', (tester) async {
     tester.view.physicalSize = const Size(390, 844);
     tester.view.devicePixelRatio = 1;
     addTearDown(tester.view.resetPhysicalSize);
@@ -52,11 +52,12 @@ void main() {
     await tester.pump();
     await tester.pump(const Duration(milliseconds: 300));
     expect(find.byKey(const Key('landing-sikku')), findsOneWidget);
+    expect(find.image(const AssetImage('assets/branding/mark.png')), findsWidgets);
     expect(find.text('GET STARTED'), findsOneWidget);
     await _saveScreen(tester, 'splash_landing');
   });
 
-  testWidgets('home landing shows the diamond sikku above PLAY', (tester) async {
+  testWidgets('home landing shows the mark image above PLAY', (tester) async {
     tester.view.physicalSize = const Size(390, 844);
     tester.view.devicePixelRatio = 1;
     addTearDown(tester.view.resetPhysicalSize);
@@ -68,6 +69,7 @@ void main() {
     await tester.pump();
     await tester.pump(const Duration(milliseconds: 300));
     expect(find.byKey(const Key('landing-sikku')), findsOneWidget);
+    expect(find.image(const AssetImage('assets/branding/mark.png')), findsWidgets);
     expect(find.text('PLAY'), findsOneWidget);
     await _saveScreen(tester, 'home_landing');
   });
