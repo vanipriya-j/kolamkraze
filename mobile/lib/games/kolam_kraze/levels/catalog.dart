@@ -77,7 +77,7 @@ List<CatalogItem> _build() {
   add(
     bindu(id: 'bindu-3', rows: 3, columns: 3, previewSeconds: 4, timeLimitSeconds: 45),
     world: PatternWorld.firstDots,
-    note: 'A single pulli, held with a loop.',
+    note: 'A single pulli, held with a four-petal loop — not a circle.',
   );
   add(
     sikkuKolam(

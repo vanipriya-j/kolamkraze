@@ -148,7 +148,10 @@ GPoint? sharedPulli(GPoint a, GPoint b) {
   return null;
 }
 
-/// Turns lattice points into a kolam curve: circular quarter-arcs around pullis, straight kambi runs.
+/// Turns lattice points into a kolam curve: petal wraps around pullis, straight kambi runs.
+///
+/// A circular quarter-arc (κ ≈ 0.552) makes bindu a circle. Real sikku/neli
+/// wraps are petals — they pinch on the diagonal between two cardinals.
 List<Offset> expandStroke(KolamStroke stroke, GridLayout layout, {int arcSteps = 12}) {
   if (stroke.points.isEmpty) return const [];
   final pts = [...stroke.points];
@@ -161,7 +164,7 @@ List<Offset> expandStroke(KolamStroke stroke, GridLayout layout, {int arcSteps =
     final b = pts[i];
     final pulli = sharedPulli(a, b);
     if (pulli != null && a != b) {
-      out.addAll(_circularArc(layout.point(a), layout.point(b), layout.point(pulli), arcSteps).skip(1));
+      out.addAll(_petalArc(layout.point(a), layout.point(b), layout.point(pulli), arcSteps).skip(1));
     } else {
       final start = out.last;
       final end = layout.point(b);
@@ -174,7 +177,11 @@ List<Offset> expandStroke(KolamStroke stroke, GridLayout layout, {int arcSteps =
   return out;
 }
 
-List<Offset> _circularArc(Offset start, Offset end, Offset center, int steps) {
+/// Cubic κ ≈ 0.552 is a circle. Lower κ pinches the diagonal into a petal
+/// (rounded diamond with tips at the cardinals). Higher κ makes a squircle.
+const double kKolamPetalKappa = 0.40;
+
+List<Offset> _petalArc(Offset start, Offset end, Offset center, int steps) {
   var a0 = math.atan2(start.dy - center.dy, start.dx - center.dx);
   var a1 = math.atan2(end.dy - center.dy, end.dx - center.dx);
   var delta = a1 - a0;
@@ -186,12 +193,25 @@ List<Offset> _circularArc(Offset start, Offset end, Offset center, int steps) {
   }
   final radius = (start - center).distance;
   if (radius < 0.001) return [start, end];
+
+  Offset tangent(double ang) => Offset(-math.sin(ang), math.cos(ang));
+  final dir = delta >= 0 ? 1.0 : -1.0;
+  final handle = kKolamPetalKappa * radius;
+  final p1 = start + tangent(a0) * (dir * handle);
+  final p2 = end - tangent(a1) * (dir * handle);
+
   final out = <Offset>[start];
   for (var s = 1; s <= steps; s++) {
-    final ang = a0 + delta * (s / steps);
-    out.add(Offset(center.dx + radius * math.cos(ang), center.dy + radius * math.sin(ang)));
+    out.add(_cubic(start, p1, p2, end, s / steps));
   }
   return out;
+}
+
+Offset _cubic(Offset p0, Offset p1, Offset p2, Offset p3, double t) {
+  final u = 1 - t;
+  final uu = u * u;
+  final tt = t * t;
+  return p0 * (uu * u) + p1 * (3 * uu * t) + p2 * (3 * u * tt) + p3 * (tt * t);
 }
 
 List<Offset> sampleStroke(KolamStroke stroke, GridLayout layout, {int density = 12}) {

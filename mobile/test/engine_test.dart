@@ -33,20 +33,23 @@ void main() {
       expect(paths, hasLength(6));
     });
 
-    test('a bindu loop goes around the pulli, not through a diamond edge', () {
+    test('a bindu loop is a petal around the pulli, not a circle', () {
       const size = Size(300, 300);
       final pattern = KolamCatalog.byId('bindu-3').pattern;
       final layout = GridLayout.fromSize(pattern.rows, pattern.columns, size);
       final samples = expandStroke(pattern.strokes.first, layout);
       final pulli = layout.dot(1, 1);
       var minD = double.infinity;
+      var maxD = 0.0;
       for (final p in samples) {
         final d = (p - pulli).distance;
         if (d < minD) minD = d;
+        if (d > maxD) maxD = d;
       }
-      // Straight cardinal chords sit ~0.35 cell from the pulli.
-      expect(minD, greaterThan(0.42 * layout.cell));
-      expect(minD, lessThan(0.58 * layout.cell));
+      // Cardinals stay on the lattice (~0.5 cell). Diagonals pinch into petals.
+      expect(minD, greaterThan(0.38 * layout.cell));
+      expect(maxD, lessThan(0.58 * layout.cell));
+      expect((maxD - minD) / minD, greaterThan(0.08));
     });
 
     test('a 3×3 sikku from cell joins is a closed weave', () {

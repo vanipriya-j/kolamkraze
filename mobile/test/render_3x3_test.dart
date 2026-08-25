@@ -15,7 +15,7 @@ void main() {
     GoogleFonts.config.allowRuntimeFetching = false;
   });
 
-  test('classic 3×3 patterns paint as rounded sikku weaves', () async {
+  test('classic 3×3 patterns paint as petal sikku weaves', () async {
     final first = KolamCatalog.filtered(world: PatternWorld.firstDots);
     expect(first, hasLength(9));
 
@@ -67,7 +67,9 @@ void main() {
     final samples = expandStroke(bindu.strokes.first, layout);
     final pulli = layout.dot(1, 1);
     final minD = samples.map((p) => (p - pulli).distance).reduce((a, b) => a < b ? a : b);
-    expect(minD, greaterThan(0.42 * layout.cell));
+    expect(minD, greaterThan(0.38 * layout.cell));
+    final maxD = samples.map((p) => (p - pulli).distance).reduce((a, b) => a > b ? a : b);
+    expect((maxD - minD) / minD, greaterThan(0.08));
   });
 }
 
