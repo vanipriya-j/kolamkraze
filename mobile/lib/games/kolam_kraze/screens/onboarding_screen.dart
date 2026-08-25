@@ -111,9 +111,8 @@ class _Splash extends StatelessWidget {
                   child: SizedBox(
                     width: side,
                     height: side,
-                    child: const LandingSikku(
+                    child: const LandingMark(
                       key: Key('landing-sikku'),
-                      fillBackground: false,
                       cornerRadius: 0,
                     ),
                   ),

@@ -2,9 +2,32 @@ import 'dart:math' as math;
 
 import 'package:flutter/material.dart';
 
+import '../../../core/design/assets.dart';
 import '../../../core/design/colors.dart';
 
-/// Cream-on-kaavi diamond sikku used on the splash and home landing.
+/// Splash and home hero: [AarlaAssets.mark] when present, else a drawn sikku.
+class LandingMark extends StatelessWidget {
+  const LandingMark({super.key, this.cornerRadius = 20});
+
+  final double cornerRadius;
+
+  @override
+  Widget build(BuildContext context) {
+    return AspectRatio(
+      aspectRatio: 1,
+      child: ClipRRect(
+        borderRadius: BorderRadius.circular(cornerRadius),
+        child: OptionalAssetImage(
+          asset: AarlaAssets.mark,
+          fit: BoxFit.contain,
+          fallback: LandingSikku(fillBackground: true, cornerRadius: cornerRadius),
+        ),
+      ),
+    );
+  }
+}
+
+/// Drawn cream-on-kaavi diamond sikku, used only if [AarlaAssets.mark] is missing.
 ///
 /// Pullis sit on a 5×5 square lattice rotated 45° (checkerboard of manhattan
 /// radius 4): rows 1-2-3-4-5-4-3-2-1. Each pulli sits in a diamond cell.

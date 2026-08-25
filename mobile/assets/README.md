@@ -8,7 +8,7 @@ Do not use green leaf graphics for Ezhai Kolam. That material is wet rice paste.
 
 | File | What it should be |
 | --- | --- |
-| `mark.png` | White kolam mark on transparent (the brand seal from the mock-up) |
+| `mark.png` | Splash and home kolam (square PNG, cream on kaavi) |
 | `wordmark.png` | Optional “KOLAM KRAZE” title lockup |
 | `app_icon.png` | 1024×1024 app icon, no rounded-rect baked in |
 
