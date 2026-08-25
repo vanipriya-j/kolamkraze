@@ -190,7 +190,7 @@ class _PlayModeCard extends StatelessWidget {
             context.push('/play/levels');
           },
           child: SizedBox(
-            height: 148,
+            height: 156,
             child: Padding(
               padding: const EdgeInsets.all(22),
               child: Row(
@@ -201,10 +201,21 @@ class _PlayModeCard extends StatelessWidget {
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       mainAxisAlignment: MainAxisAlignment.center,
+                      mainAxisSize: MainAxisSize.min,
                       children: [
-                        Text(mode.label.toUpperCase(), style: const TextStyle(color: AarlaColors.ivory, fontSize: 22, fontWeight: FontWeight.w800, letterSpacing: 1.2)),
-                        const SizedBox(height: 6),
-                        Text(mode.line, style: const TextStyle(color: Color(0xFFF6E4D4), fontSize: 16)),
+                        Text(
+                          mode.label.toUpperCase(),
+                          maxLines: 1,
+                          overflow: TextOverflow.ellipsis,
+                          style: const TextStyle(color: AarlaColors.ivory, fontSize: 22, fontWeight: FontWeight.w800, letterSpacing: 1.2),
+                        ),
+                        const SizedBox(height: 4),
+                        Text(
+                          mode.line,
+                          maxLines: 2,
+                          overflow: TextOverflow.ellipsis,
+                          style: const TextStyle(color: Color(0xFFF6E4D4), fontSize: 16),
+                        ),
                       ],
                     ),
                   ),
